@@ -1,109 +1,88 @@
 public class BinaryHeap {
-    public int capacity;
-    public int [] mH;
-    public int currentSize;
+    private int[] arr;
+    private int capacity;
+    private int size;
 
     public BinaryHeap(){
         this(10);
     }
-    public BinaryHeap(int capacity){
-        this.capacity=capacity;
-        mH = new int [capacity+1];
-        currentSize =0;
+    public BinaryHeap(int eger){
+    capacity = eger;
+    arr = new int[capacity];
+    size = 0;
     }
-    // public void createHeap(int [] arrA){
-    //     if(arrA.length>0){
-    //         for(int i=0;i<arrA.length;i++){
-    //             insert(arrA[i]);
-    //         }
-    //     }
-    // }
-    // public void display(){
-    //     for(int i=1;i<mH.length;i++){
-    //         System.out.print(" " + mH[i]);
-    //     }
-    //     System.out.println("");
-    // }
-    public void add(int x) {
-        if(currentSize==capacity){
-            
+    public void add(int obj){
+        if(size == arr.length){
+            doubleArr();
         }
-        currentSize++;
-        int idx = currentSize;
-        mH[idx] = x;
-        bubbleUp(idx);
+        size++;
+        arr[size - 1] = obj;
+        shiftUp(size - 1);
     }
-
-    public void bubbleUp(int pos) {
-        int parentIdx = pos/2;
-        int currentIdx = pos;
-        while (currentIdx > 0 && mH[parentIdx] > mH[currentIdx]) {
-
-            swap(currentIdx,parentIdx);
-            currentIdx = parentIdx;
-            parentIdx = parentIdx/2;
+    public int remove(){
+        if(arr.length == 0){
+            throw new IllegalArgumentException();
         }
+        int tbr = arr[0];
+        arr[0] = arr[size - 1];
+        size--;
+        shiftDown(0);
+        return tbr;
     }
-
-    public int remove() {
-        int min = mH[1];
-        mH[1] = mH[currentSize];
-        mH[currentSize] = 0;
-        sinkDown(1);
-        currentSize--;
-        return min;
-    }
-
-    public void sinkDown(int k) {
-        int smallest = k;
-        int leftChildIdx = 2 * k;
-        int rightChildIdx = 2 * k+1;
-        if (leftChildIdx < heapSize() && mH[smallest] > mH[leftChildIdx]) {
-            smallest = leftChildIdx;
+    public void shiftDown(int parent){
+        int child;
+        int lChild = (2*parent+1);
+        int rChild = (2*parent+2);
+        if(rChild >= size){
+            if(lChild >= size){
+                return;
+            } 
+            else{
+                child = lChild;
+            }
         }
-        if (rightChildIdx < heapSize() && mH[smallest] > mH[rightChildIdx]) {
-            smallest = rightChildIdx;
+        else{
+            if(arr[lChild] <= arr[rChild]){
+                child = lChild;
+            }
+            else{
+                child = rChild;
+            }
         }
-        if (smallest != k) {
-
-            swap(k, smallest);
-            sinkDown(smallest);
+        if(arr[parent] > arr[child]){
+            swap(arr, child, parent);
+            shiftDown(child);
         }
+        return;
     }
-
-    public void swap(int a, int b) {
-        int temp = mH[a];
-        mH[a] = mH[b];
-        mH[b] = temp;
-    }
-    public boolean isEmpty() {
-        return currentSize == 0;
-    }
-
-    public int heapSize(){
-        return currentSize;
-    }
-    // public static void main(String args[]){
-    //     int arrA [] = {3,2,1,7,8,4,10,16,12};
-    //     System.out.print("Original Array : ");
-    //     for(int i=0;i<arrA.length;i++){
-    //         System.out.print("  " + arrA[i]);
-    //     }
-    //     minHeap m = new minHeap(arrA.length);
-    //     System.out.print("\nMin-Heap : ");
-    //     m.createHeap(arrA);
-    //     m.display();
-    //     System.out.print("Extract Min :");
-    //     for(int i=0;i<arrA.length;i++){
-    //         System.out.print("  " + m.extractMin());
-    //     }
-    // }
+    public void shiftUp(int index) {
+        int parIndex, temp; 
+        if (index != 0){
+            parIndex = (index-1)/2; 
+            if (arr[parIndex] > arr[index]) {
+                swap(arr, parIndex, index);
+                shiftUp(parIndex);
+            }
+        }
+    } 
+/*    private boolean isleaf(int pos){
+        return ((pos > size/2) && (pos <= size));
+    }*/
     public void doubleArr(){
         int[] newArr = new int[capacity*2];
         for(int i = 0; i < capacity; i++){
-            newArr[i] = mH[i];
+            newArr[i] = arr[i];
         }
-        mH = newArr;
+        arr = newArr;
         capacity = capacity*2;
+    }
+    private void swap(int[] arr, int pos1, int pos2){
+        int tmp;
+        tmp = arr[pos1];
+        arr[pos1] = arr[pos2];
+        arr[pos2] = tmp;
+    }
+    public static void main(String[] args){
+
     }
 }
