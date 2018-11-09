@@ -65,9 +65,6 @@ public class BinaryHeap {
             }
         }
     } 
-/*    private boolean isleaf(int pos){
-        return ((pos > size/2) && (pos <= size));
-    }*/
     public void doubleArr(){
         int[] newArr = new int[capacity*2];
         for(int i = 0; i < capacity; i++){
